@@ -10,3 +10,10 @@ function multiply() {
 function divide() {
     return
 }
+function operate(n1, op, n2) {
+    return
+}
+
+let num1;
+let operator;
+let num2;
