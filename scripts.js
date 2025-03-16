@@ -55,7 +55,7 @@ numbers.addEventListener("click", (event) => {
         freshStart();
         panel.textContent = "";
     }
-    else if (operator === undefined) {
+    if (operator === undefined) {
 
         if (num1 === undefined) {
             num1 = event.target.value;
@@ -74,7 +74,6 @@ numbers.addEventListener("click", (event) => {
             panel.textContent += `${num2}`;
         } else {
             num2 += event.target.value;
-            panel.textContent = "";
             panel.textContent = `${num1}${operator}${num2}`;
         }
     }
