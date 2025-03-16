@@ -55,7 +55,10 @@ numbers.addEventListener("click", (event) => {
         }
     } 
     else if (operator !== undefined) {
-        if (num2 === undefined) {
+        if (operator === "/" && event.target.value === "0") {
+            panel.textContent = "Go back to kindergarten, bro";
+        }
+        else if (num2 === undefined) {
             num2 = event.target.value;
             panel.textContent += `${num2}`;
         } else {
@@ -74,8 +77,10 @@ signal.addEventListener("click", (event) => {
         panel.textContent = "";
     }
     else if (event.target.value === "=") {
-        result = operate(num1, operator, num2);
-        panel.textContent = `${result}`;
+        if (num1 !== undefined && num2 !== undefined && operator !== undefined) {
+            result = operate(num1, operator, num2);
+            panel.textContent = `${result}`;
+        }
     }
     else if (event.target.value !== "=" && operator === undefined) {
         operator = event.target.value;
