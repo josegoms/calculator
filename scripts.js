@@ -33,6 +33,11 @@ function operate(n1, op, n2) {
     }
     return result;
 }
+function freshStart() {
+    num1 = undefined;
+    num2 = undefined;
+    operator = undefined;
+}
 
 let num1;
 let num2;
@@ -44,7 +49,13 @@ const signal = document.querySelector(".add-buttons");
 const panel = document.querySelector(".display");
 
 numbers.addEventListener("click", (event) => {
-    if (operator === undefined) {
+
+    if (result !== undefined || panel.textContent === "Go back to kindergarten, bro") {
+        result = undefined;
+        freshStart();
+        panel.textContent = "";
+    }
+    else if (operator === undefined) {
 
         if (num1 === undefined) {
             num1 = event.target.value;
@@ -71,9 +82,7 @@ numbers.addEventListener("click", (event) => {
 
 signal.addEventListener("click", (event) => {
     if (event.target.value === "clear") {
-        num1 = undefined;
-        num2 = undefined;
-        operator = undefined;
+        freshStart();
         panel.textContent = "";
     }
     else if (event.target.value === "=") {
@@ -89,6 +98,7 @@ signal.addEventListener("click", (event) => {
     else if (operator !== undefined && num2 !== undefined) {
         result = operate(num1, operator, num2);
         num1 = result;
+        result = undefined;
         num2 = undefined;
         operator = event.target.value;
         panel.textContent = `${num1}${operator}`;
