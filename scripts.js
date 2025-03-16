@@ -38,6 +38,81 @@ function freshStart() {
     num2 = undefined;
     operator = undefined;
 }
+function handleNumbersSection(event) {
+    
+    if (result !== undefined || panel.textContent === "Go back to kindergarten, bro") {
+        result = undefined;
+        freshStart();
+        panel.textContent = "";
+    }
+    if (event.target.value === "delete" || event.key === "Backspace") {
+        if (operator === undefined && num1 !== undefined) {
+            let tempNum1 = num1;
+            num1 = undefined;
+            num1 = tempNum1.slice(0, -1);
+        }
+        else if (operator !== undefined) {
+            if (num2 === undefined) {
+                operator = undefined;
+            } else {
+                let tempNum2 = num2;
+                num2 = undefined;
+                num2 = tempNum2.slice(0, -1);
+            }
+        }
+        let tempPanel = panel.textContent;
+        panel.textContent = tempPanel.slice(0, -1);
+        return;
+    }
+    if (operator === undefined) {
+
+        if (num1 === undefined && (event.target.value !== "." || event.key !== ".")) {
+            num1 = (event.target.value || event.key);
+            panel.textContent = `${num1}`;
+        }
+        else if (num1 !== undefined) {
+            num1 += (event.target.value || event.key);
+            panel.textContent = `${num1}`;
+        }
+    } 
+    else if (operator !== undefined) {
+        if (operator === "/" && (event.target.value === "0" || event.key === "0")) {
+            panel.textContent = "Go back to kindergarten, bro";
+        }
+        else if (num2 === undefined && (event.target.value !== "." || event.key !== ".")) {
+            num2 = (event.target.value || event.key);
+            panel.textContent += `${num2}`;
+        }
+        else if (num2 !== undefined) {
+            num2 += (event.target.value || event.key);
+            panel.textContent = `${num1}${operator}${num2}`;
+        }
+    }
+}
+function handleAddButtonsCase(event) {
+    if (event.target.value === "clear" || event.key === "Delete") {
+        freshStart();
+        panel.textContent = "";
+    }
+    else if (event.target.value === "=" || event.key === "Enter") {
+        if (num1 !== undefined && num2 !== undefined && operator !== undefined) {
+            result = operate(num1, operator, num2);
+            panel.textContent = `${result}`;
+        }
+    }
+    else if ((event.target.value !== "=" || event.key !== "Enter") && operator === undefined) {
+        operator = (event.target.value || event.key);
+        panel.textContent += `${operator}`;
+    }
+    else if (operator !== undefined && num2 !== undefined) {
+        result = operate(num1, operator, num2);
+        num1 = result;
+        result = undefined;
+        num2 = undefined;
+        operator = (event.target.value || event.key);
+        panel.textContent = `${num1}${operator}`;
+    }
+}
 
 let num1;
 let num2;
@@ -48,59 +123,15 @@ const numbers = document.querySelector(".numbers");
 const signal = document.querySelector(".add-buttons");
 const panel = document.querySelector(".display");
 
-numbers.addEventListener("click", (event) => {
-
-    if (result !== undefined || panel.textContent === "Go back to kindergarten, bro") {
-        result = undefined;
-        freshStart();
-        panel.textContent = "";
+numbers.addEventListener("click", handleNumbersSection);
+signal.addEventListener("click", handleAddButtonsCase);
+window.addEventListener("keydown",(event) => {
+    const allowedNumbersKeys = [".", "Backspace"];
+    const allowedAddButtonKeys = ["Delete", "+", "-", "*", "/", "Enter"];
+    if (/\d/.test(event.key) || allowedNumbersKeys.includes(event.key)) {
+        handleNumbersSection(event);
     }
-    if (operator === undefined) {
-
-        if (num1 === undefined) {
-            num1 = event.target.value;
-            panel.textContent = `${num1}`;
-        } else {
-            num1 += event.target.value;
-            panel.textContent = `${num1}`;
-        }
-    } 
-    else if (operator !== undefined) {
-        if (operator === "/" && event.target.value === "0") {
-            panel.textContent = "Go back to kindergarten, bro";
-        }
-        else if (num2 === undefined) {
-            num2 = event.target.value;
-            panel.textContent += `${num2}`;
-        } else {
-            num2 += event.target.value;
-            panel.textContent = `${num1}${operator}${num2}`;
-        }
+    else if (allowedAddButtonKeys.includes(event.key)) {
+        handleAddButtonsCase(event);
     }
 });
-
-signal.addEventListener("click", (event) => {
-    if (event.target.value === "clear") {
-        freshStart();
-        panel.textContent = "";
-    }
-    else if (event.target.value === "=") {
-        if (num1 !== undefined && num2 !== undefined && operator !== undefined) {
-            result = operate(num1, operator, num2);
-            panel.textContent = `${result}`;
-        }
-    }
-    else if (event.target.value !== "=" && operator === undefined) {
-        operator = event.target.value;
-        panel.textContent += `${operator}`;
-    }
-    else if (operator !== undefined && num2 !== undefined) {
-        result = operate(num1, operator, num2);
-        num1 = result;
-        result = undefined;
-        num2 = undefined;
-        operator = event.target.value;
-        panel.textContent = `${num1}${operator}`;
-    }
-});
-
