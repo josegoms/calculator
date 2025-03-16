@@ -119,6 +119,18 @@ let num2;
 let operator;
 let result;
 
+document.querySelectorAll("button").forEach(button => {
+    button.setAttribute("tabindex", "-1")
+    button.addEventListener("click", (event) => event.target.blur());
+});
+
+document.addEventListener("keydown", (event) => {
+    if(["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)) {
+        event.preventDefault();
+    }
+    document.activeElement.blur();
+});
+
 const numbers = document.querySelector(".numbers");
 const signal = document.querySelector(".add-buttons");
 const panel = document.querySelector(".display");
