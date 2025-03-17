@@ -66,8 +66,12 @@ function handleNumbersSection(event) {
     }
     if (operator === undefined) {
 
-        if (num1 === undefined && (event.target.value !== "." || event.key !== ".")) {
-            num1 = (event.target.value || event.key);
+        if (num1 === undefined) {
+            if (event.target.value === "." || event.key === ".") {
+                num1 = "0.";
+            } else {
+                num1 = (event.target.value || event.key);
+            }
             panel.textContent = `${num1}`;
         }
         else if (num1 !== undefined) {
@@ -83,8 +87,12 @@ function handleNumbersSection(event) {
         if (operator === "/" && (event.target.value === "0" || event.key === "0")) {
             panel.textContent = "Go back to kindergarten, bro";
         }
-        else if (num2 === undefined && (event.target.value !== "." || event.key !== ".")) {
-            num2 = (event.target.value || event.key);
+        else if (num2 === undefined) {
+            if (event.target.value === "." || event.key === ".") {
+                num2 = "0.";
+            } else {
+                num2 = (event.target.value || event.key);
+            }
             panel.textContent += `${num2}`;
         }
         else if (num2 !== undefined) {
@@ -108,17 +116,23 @@ function handleAddButtonsCase(event) {
             panel.textContent = `${result}`;
         }
     }
-    else if ((event.target.value !== "=" || event.key !== "Enter") && operator === undefined) {
+    else if (operator === undefined) {
         operator = (event.target.value || event.key);
         panel.textContent += `${operator}`;
     }
-    else if (operator !== undefined && num2 !== undefined) {
-        result = operate(num1, operator, num2);
-        num1 = result;
-        result = undefined;
-        num2 = undefined;
-        operator = (event.target.value || event.key);
-        panel.textContent = `${num1}${operator}`;
+    else if (operator !== undefined) {
+        if (num2 !== undefined) {
+            result = operate(num1, operator, num2);
+            num1 = result;
+            result = undefined;
+            num2 = undefined;
+            operator = (event.target.value || event.key);
+            panel.textContent = `${num1}${operator}`; 
+        }
+        else if (num2 === undefined) {
+            operator = (event.target.value || event.key);
+            panel.textContent = panel.textContent.slice(0, -1) + `${operator}`;
+        }
     }
 }
 
