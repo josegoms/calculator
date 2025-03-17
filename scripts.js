@@ -71,8 +71,12 @@ function handleNumbersSection(event) {
             panel.textContent = `${num1}`;
         }
         else if (num1 !== undefined) {
-            num1 += (event.target.value || event.key);
-            panel.textContent = `${num1}`;
+            if ((event.target.value === "." || event.key === ".") && num1.includes(".")) {
+                return;
+            } else {
+                num1 += (event.target.value || event.key);
+                panel.textContent = `${num1}`;
+            }
         }
     } 
     else if (operator !== undefined) {
@@ -84,8 +88,12 @@ function handleNumbersSection(event) {
             panel.textContent += `${num2}`;
         }
         else if (num2 !== undefined) {
-            num2 += (event.target.value || event.key);
-            panel.textContent = `${num1}${operator}${num2}`;
+            if ((event.target.value === "." || event.key === ".") && num2.includes(".")) {
+                return;
+            } else {
+                num2 += (event.target.value || event.key);
+                panel.textContent = `${num1}${operator}${num2}`;
+            }
         }
     }
 }
@@ -141,7 +149,7 @@ window.addEventListener("keydown",(event) => {
     const allowedNumbersKeys = [".", "Backspace"];
     const allowedAddButtonKeys = ["Delete", "+", "-", "*", "/", "Enter"];
     const functionKeys = ["F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12"];
-    
+
     if (functionKeys.includes(event.key)) {
         return;
     }
