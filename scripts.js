@@ -39,7 +39,10 @@ function freshStart() {
     operator = undefined;
 }
 function handleNumbersSection(event) {
-    
+
+    if (!event.target.matches('button')) {
+        return;
+    }
     if (result !== undefined || panel.textContent === "Go back to kindergarten, bro") {
         result = undefined;
         freshStart();
@@ -106,6 +109,11 @@ function handleNumbersSection(event) {
     }
 }
 function handleAddButtonsCase(event) {
+    
+    if (!event.target.matches('button')) {
+        return;
+    }
+
     if (event.target.value === "clear" || event.key === "Delete") {
         freshStart();
         panel.textContent = "";
